@@ -9,6 +9,11 @@ const data = {
     lastName: 'Tran',
     email: 'tmtuanyd@gmail.com'
 }
+const validate = value => {
+    let error = {}
+    console.log(value)
+    return error
+}
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
     <div>
@@ -108,7 +113,7 @@ class ContactForm extends Component {
 const selector = formValueSelector('contact')
 const mapStateToProps = state => {
     return {
-        initialValues: data,
+        initialValues: data, //pull data ve form
         firstName: selector(state,['avatar'])
     }
 }
@@ -123,6 +128,7 @@ export default compose(connect(mapStateToProps, mapDispatchToProps), reduxForm({
     form: 'contact',
     onSubmit: mySubmit,
     enableReinitialize : true,
+    validate
 })) (ContactForm)
 
 
