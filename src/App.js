@@ -1,23 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
 import ContactForm from "./component/ContactForm";
-
+import { submit } from 'redux-form';
 import React, {Component} from 'react';
+import {getFormValues} from "redux-form";
+import {compose} from "redux";
+import {connect} from "react-redux";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
   }
-  showResults = (event) => {
-    console.log('hello')
-  }
 
   render() {
+    console.log(this.props.values)
     return (
-        <ContactForm/>
+        <div>
+          <ContactForm/>
+          <button type="submit" onClick={this.props.submitForm}>Submit</button>
+        </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    values: getFormValues('contact')(state)
+  }
+}
+const mapDispatchToProps = (dispatch)=>{
+  return {
+    submitForm: () => dispatch(submit('contact')),
+  }
+};
+
+export default compose(connect(mapStateToProps, mapDispatchToProps)) (App);

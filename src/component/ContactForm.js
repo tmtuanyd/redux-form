@@ -19,7 +19,18 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
         </div>
     </div>
 )
-
+const mySubmit = (value) => {
+    let {firstName, lastName, email} = value
+    console.log(value)
+    if (!['john', 'paul', 'george', 'ringo'].includes(firstName)) {
+        throw new SubmissionError({
+            firstName: 'User does not exist',
+            _error: 'Login failed!'
+        })
+    } else {
+        alert(JSON.stringify(value))
+    }
+}
 
 class ContactForm extends Component {
     constructor(props) {
@@ -28,19 +39,7 @@ class ContactForm extends Component {
             imageFile: []
         }
     }
-    mySubmit = (value) => {
-        let {firstName, lastName, email} = value
-        console.log(value)
-        if (!['john', 'paul', 'george', 'ringo'].includes(value.firstName)) {
-            throw new SubmissionError({
-                firstName: 'User does not exist',
-                _error: 'Login failed!'
-            })
-        } else {
-            alert(JSON.stringify(value))
-        }
 
-    }
     // onChange = (e) => {
     //     console.log(e)
     //     const { input: { onChange } } = this.props
@@ -77,9 +76,10 @@ class ContactForm extends Component {
             // imageObject.src = localImageUrl;
         }
     };
+
     render() {
         const {handleSubmit, error} = this.props
-        return <form onSubmit={handleSubmit(this.mySubmit)}>
+        return <form onSubmit={handleSubmit(mySubmit)}>
             <div>
                 <button type="button" onClick={() => this.props.load(data)}>Load Account</button>
             </div>
@@ -100,7 +100,7 @@ class ContactForm extends Component {
                 <Field name="avatar" component={this.CustomFile} type="file"/>
             </div>
             {error && <strong>{error}</strong>}
-            <button type="submit">Submit</button>
+            {/*<button type={"submit"}>Submit</button>*/}
         </form>
     }
 }
@@ -121,6 +121,7 @@ const mapDispatchToProps = (dispatch)=>{
 export default compose(connect(mapStateToProps, mapDispatchToProps), reduxForm({
     // a unique name for the form
     form: 'contact',
+    onSubmit: mySubmit,
     enableReinitialize : true,
 })) (ContactForm)
 
